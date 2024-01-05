@@ -57,7 +57,7 @@ class Administrator extends CI_Controller {
 			$data['record'] = $this->model_menu->menu_utama();
 			$this->template->load('administrator/template','administrator/mod_menu/view_menu_tambah',$data);
 		}
-	}
+	}    
 
 	function edit_menuwebsite(){
 		cek_session_admin();
@@ -263,9 +263,6 @@ class Administrator extends CI_Controller {
 		$this->model_menu->menugrouplist_delete($id);
 		redirect('administrator/menugrouplist');
 	}
-
-
-
 
 	// Controller Modul Tag Berita
 
@@ -1518,8 +1515,6 @@ class Administrator extends CI_Controller {
         redirect('administrator/tagvideo');
     }
 
-
-
     // Controller Modul Link Terkait
 
     function linkterkait(){
@@ -1541,7 +1536,281 @@ class Administrator extends CI_Controller {
             $data = array('rows' => $proses);
             $this->template->load('administrator/template','administrator/mod_linkterkait/view_linkterkait_edit',$data);
         }
+    }   
+
+    // Menu Slider Tambah
+    function tambah_slider(){
+		cek_session_admin();		
+        if (isset($_POST['submit'])){
+            $config['upload_path'] = 'asset/slider/';
+            $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+            $config['max_size'] = '3000'; // kb
+            $this->load->library('upload', $config);
+            $this->upload->do_upload('gambar');
+            $hasil=$this->upload->data();
+            if ($hasil['file_name']==''){
+                $data = array('id_slider'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'keterangan'=>$this->input->post('keterangan'),                            
+                            'kategori'=>$this->input->post('kategori'),
+                			);
+            }else{
+                $data = array('id_slider'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'keterangan'=>$this->input->post('keterangan'),                            
+                            'kategori'=>$this->input->post('kategori'),
+                            'gambar'=>$hasil['file_name']);
+            }
+            $this->model_app->insert('slider',$data);  
+            redirect('administrator/slider');
+        }else{
+            $data['record'] = $this->model_slider->view_ordering('slider','id_slider','DESC');
+            $this->template->load('administrator/template','administrator/mod_slider/view_slider_tambah',$data);
+        }
+	}    
+
+    function slider(){
+        if ($this->session->level=='admin'){
+            $data['record'] = $this->model_app->view_ordering('slider','id_slider','DESC');
+        }else{
+            $data['record'] = $this->model_app->view_where_ordering('slider',array('username'=>$this->session->username),'id_slider','DESC');
+        }
+        $this->template->load('administrator/template','administrator/mod_slider/view_slider',$data);
     }
+
+    function edit_slider(){
+        $id = $this->uri->segment(3);
+        if (isset($_POST['submit'])){
+            $config['upload_path'] = 'asset/img_galeri/';
+            $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+            $config['max_size'] = '3000'; // kb
+            $this->load->library('upload', $config);
+            $this->upload->do_upload('gambar');
+            $hasil=$this->upload->data();
+            if ($hasil['file_name']==''){
+                $data = array('id_slider'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'keterangan'=>$this->input->post('keterangan'),                            
+                            'kategori'=>$this->input->post('kategori'),
+                        );
+            }else{
+                $data = array('id_slider'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'keterangan'=>$this->input->post('keterangan'),                            
+                            'kategori'=>$this->input->post('kategori'),
+                            'gambar'=>$hasil['file_name']
+                        );
+            }
+            $where = array('id_slider' => $this->input->post('id'));
+            $this->model_slider->update('slider', $data, $where);
+            redirect('administrator/slider');
+        }else{
+            $record = $this->model_app->view_ordering('slider','id_slider','DESC');
+            if ($this->session->level=='admin'){
+                $proses = $this->model_slider->edit('slider', array('id_slider' => $id))->row_array();
+            }else{
+                $proses = $this->model_slider->edit('slider', array('id_slider' => $id, 'username' => $this->session->username))->row_array();
+            }
+            $data = array('rows' => $proses,'record' => $record);
+            $this->template->load('administrator/template','administrator/mod_slider/view_slider_edit',$data);
+        }
+    }
+
+    function delete_slider(){
+        if ($this->session->level=='admin'){
+            $id = array('id_slider' => $this->uri->segment(3));            
+            $findImage = $this->db->get_where('slider',['id_slider' => $id['id_slider']])->row();
+            unlink('asset/slider/'.$findImage->gambar);
+        }else{
+            $id = array('id_slider' => $this->uri->segment(3), 'username'=>$this->session->username);            
+        }
+        $this->model_slider->delete('slider',$id);
+        redirect('administrator/slider');
+    }
+
+    // Pustaka Luar
+
+    function pustakaluar(){
+        if ($this->session->level=='admin'){
+            $data['record'] = $this->model_pustakaluar->view_ordering('pustakaluar','id_pustakaluar','DESC');
+        }else{
+            $data['record'] = $this->model_pustakaluar->view_where_ordering('pustakaluar',array('username'=>$this->session->username),'id_pustakaluar','DESC');
+        }
+        $this->template->load('administrator/template','administrator/mod_pustakaluar/view_pustakaluar',$data);
+    }
+
+    function tambah_pustakaluar(){
+		cek_session_admin();		
+        if (isset($_POST['submit'])){
+            $config['upload_path'] = 'asset/pustakaluar/';
+            $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+            $config['max_size'] = '3000'; // kb
+            $this->load->library('upload', $config);
+            $this->upload->do_upload('gambar');
+            $hasil=$this->upload->data();
+            if ($hasil['file_name']==''){
+                $data = array('id_pustakaluar'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'judulpustaka'=>$this->input->post('judulpustaka'),
+                            'link'=>$this->input->post('link'),
+                			);
+            }else{
+                $data = array('id_pustakaluar'=>$this->input->post('id'),
+                            'username'=>$this->session->username,
+                            'judulpustaka'=>$this->input->post('judulpustaka'),
+                            'link'=>$this->input->post('link'),          
+                            'gambar'=>$hasil['file_name']);
+            }
+            $this->model_app->insert('pustakaluar',$data);  
+            redirect('administrator/pustakaluar');
+        }else{
+            $data['record'] = $this->model_pustakaluar->view_ordering('pustakaluar','id_pustakaluar','DESC');
+            $this->template->load('administrator/template','administrator/mod_pustakaluar/view_pustakaluar_tambah',$data);
+        }
+	}    
+
+    function edit_pustakaluar(){
+        $id = $this->uri->segment(3);
+        if (isset($_POST['submit'])){
+            $config['upload_path'] = 'asset/pustakaluar/';
+            $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+            $config['max_size'] = '3000'; // kb
+            $this->load->library('upload', $config);
+            $this->upload->do_upload('gambar');
+            $hasil=$this->upload->data();
+            if ($hasil['file_name']==''){
+                $data = array('id_pustakaluar'=>$this->input->post('id'),
+                            'username'=>$this->session->username,                            
+                            'judulpustaka'=>$this->input->post('judulpustaka'),
+                            'link'=>$this->input->post('link'),          
+                        );
+            }else{
+                $data = array('id_pustakaluar'=>$this->input->post('id'),
+                            'username'=>$this->session->username,                            
+                            'judulpustaka'=>$this->input->post('judulpustaka'),
+                            'link'=>$this->input->post('link'),          
+                            'gambar'=>$hasil['file_name']
+                        );
+            }
+            $where = array('id_pustakaluar' => $this->input->post('id'));
+            $this->model_pustakaluar->update('pustakaluar', $data, $where);
+            redirect('administrator/pustakaluar');
+        }else{
+            $record = $this->model_app->view_ordering('pustakaluar','id_pustakaluar','DESC');
+            if ($this->session->level=='admin'){
+                $proses = $this->model_pustakaluar->edit('pustakaluar', array('id_pustakaluar' => $id))->row_array();
+            }else{
+                $proses = $this->model_pustakaluar->edit('pustakaluar', array('id_pustakaluar' => $id, 'username' => $this->session->username))->row_array();
+            }
+            $data = array('rows' => $proses,'record' => $record);
+            $this->template->load('administrator/template','administrator/mod_pustakaluar/view_pustakaluar_edit',$data);
+        }
+    }
+
+    function delete_pustakaluar(){
+        if ($this->session->level=='admin'){
+            $id = array('id_pustakaluar' => $this->uri->segment(3));            
+            $findImage = $this->db->get_where('pustakaluar',['id_pustakaluar' => $id['id_pustakaluar']])->row();
+            unlink('asset/pustakaluar/'.$findImage->gambar);
+        }else{
+            $id = array('id_pustakaluar' => $this->uri->segment(3), 'username'=>$this->session->username);            
+        }
+        $this->model_pustakaluar->delete('pustakaluar',$id);
+        redirect('administrator/pustakaluar');
+    }
+
+    // Poster Publik
+        // Pustaka Luar
+
+        function posterpublik(){
+            if ($this->session->level=='admin'){
+                $data['record'] = $this->model_posterpublik->view_ordering('posterpublik','id_posterpublik','DESC');
+            }else{
+                $data['record'] = $this->model_posterpublik->view_where_ordering('posterpublik',array('username'=>$this->session->username),'id_posterpublik','DESC');
+            }
+            $this->template->load('administrator/template','administrator/mod_posterpublik/view_posterpublik',$data);
+        }
+    
+        function tambah_posterpublik(){
+            cek_session_admin();		
+            if (isset($_POST['submit'])){
+                $config['upload_path'] = 'asset/posterpublik/';
+                $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+                $config['max_size'] = '3000'; // kb
+                $this->load->library('upload', $config);
+                $this->upload->do_upload('gambar');
+                $hasil=$this->upload->data();
+                if ($hasil['file_name']==''){
+                    $data = array('id_posterpublik'=>$this->input->post('id'),
+                                'username'=>$this->session->username,
+                                'judulposterpublik'=>$this->input->post('judulposterpublik'),
+                                'link'=>$this->input->post('link'),
+                                );
+                }else{
+                    $data = array('id_posterpublik'=>$this->input->post('id'),
+                                'username'=>$this->session->username,
+                                'judulposterpublik'=>$this->input->post('judulposterpublik'),
+                                'link'=>$this->input->post('link'),          
+                                'gambar'=>$hasil['file_name']);
+                }
+                $this->model_posterpublik->insert('posterpublik',$data);  
+                redirect('administrator/posterpublik');
+            }else{
+                $data['record'] = $this->model_posterpublik->view_ordering('posterpublik','id_posterpublik','DESC');
+                $this->template->load('administrator/template','administrator/mod_posterpublik/view_posterpublik_tambah',$data);
+            }
+        }    
+    
+        function edit_posterpublik(){
+            $id = $this->uri->segment(3);
+            if (isset($_POST['submit'])){
+                $config['upload_path'] = 'asset/posterpublik/';
+                $config['allowed_types'] = 'gif|jpg|png|JPG|JPEG';
+                $config['max_size'] = '3000'; // kb
+                $this->load->library('upload', $config);
+                $this->upload->do_upload('gambar');
+                $hasil=$this->upload->data();
+                if ($hasil['file_name']==''){
+                    $data = array('id_posterpublik'=>$this->input->post('id'),
+                                'username'=>$this->session->username,                            
+                                'judulpustaka'=>$this->input->post('judulpustaka'),
+                                'link'=>$this->input->post('link'),          
+                            );
+                }else{
+                    $data = array('id_posterpublik'=>$this->input->post('id'),
+                                'username'=>$this->session->username,                            
+                                'judulpustaka'=>$this->input->post('judulpustaka'),
+                                'link'=>$this->input->post('link'),          
+                                'gambar'=>$hasil['file_name']
+                            );
+                }
+                $where = array('id_posterpublik' => $this->input->post('id'));
+                $this->model_posterpublik->update('posterpublik', $data, $where);
+                redirect('administrator/posterpublik');
+            }else{
+                $record = $this->model_app->view_ordering('posterpublik','id_posterpublik','DESC');
+                if ($this->session->level=='admin'){
+                    $proses = $this->model_posterpublik->edit('posterpublik', array('id_posterpublik' => $id))->row_array();
+                }else{
+                    $proses = $this->model_posterpublik->edit('posterpublik', array('id_posterpublik' => $id, 'username' => $this->session->username))->row_array();
+                }
+                $data = array('rows' => $proses,'record' => $record);
+                $this->template->load('administrator/template','administrator/mod_posterpublik/view_posterpublik_edit',$data);
+            }
+        }
+    
+        function delete_posterpublik(){
+            if ($this->session->level=='admin'){
+                $id = array('id_posterpublik' => $this->uri->segment(3));            
+                $findImage = $this->db->get_where('posterpublik',['id_posterpublik' => $id['id_posterpublik']])->row();
+                unlink('asset/posterpublik/'.$findImage->gambar);
+            }else{
+                $id = array('id_posterpublik' => $this->uri->segment(3), 'username'=>$this->session->username);            
+            }
+            $this->model_posterpublik->delete('posterpublik',$id);
+            redirect('administrator/posterpublik');
+        }
+    
 
 	function logout(){
 		$this->session->sess_destroy();

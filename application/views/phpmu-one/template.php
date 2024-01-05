@@ -28,6 +28,10 @@
   <link rel="stylesheet" href="<?php echo base_url()?>asset/frontends/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>">
   <link rel="stylesheet" href="<?php echo base_url()?>asset/frontends/css/responsive.css">
 
+  <!-- Owl Carousel -->
+  <link rel="stylesheet" href="<?php echo base_url()?>asset/frontends/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="<?php echo base_url()?>asset/frontends/css/owl.theme.default.min.css">
+
 </head>
 
 <body id="top-header">
@@ -125,6 +129,23 @@
 
     <script src="<?php echo base_url()?>asset/frontends/js/script.js"></script>
 
+    <script src="<?php echo base_url()?>asset/frontends/js/owl.carousel.min.js"></script>
+
+    <script>
+        $('.owl-carousel').owlCarousel({
+            loop:true,
+            margin:10,
+            nav:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:3
+                },                               
+            }
+        })
+    </script>
 
   </body>
   </html>

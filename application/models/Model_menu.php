@@ -27,7 +27,7 @@ class Model_menu extends CI_model{
                         'nama'=>$this->db->escape_str($this->input->post('b')),
                         'link'=>$this->db->escape_str($this->input->post('c')));
         $this->db->insert('group_menu_list',$datadb);
-    }
+    }    
 
     function menugrouplist_edit($id){
         return $this->db->query("SELECT * FROM group_menu_list where id_group_menu_list='$id'");

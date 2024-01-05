@@ -29,11 +29,11 @@
             <ul class="nav navbar-nav">
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown messages-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-envelope-o"></i> Pesan Masuk
                   <?php $jmlh = $this->db->query("SELECT * FROM hubungi where dibaca='N'")->num_rows(); ?>
                   <span class="label label-success"><?php echo $jmlh; ?></span>
-                </a>
+                </a> -->
                 <ul class="dropdown-menu">
                   <li class="header">You have <?php echo $jmlh; ?> new messages</li>
                   <li>

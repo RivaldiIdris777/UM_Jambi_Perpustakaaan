@@ -1564,9 +1564,6 @@ Banner style 2
 /*--------------------------
 Banner-3
 ----------------------------*/
-.banner-padding {
-  padding: 120px 0px;
-}
 
 .banner-style-3 {
   position: relative;
@@ -1609,8 +1606,6 @@ Banner-3
 .banner-style-4 {
   position: relative;
   z-index: 1;
-  
-  padding-bottom: 220px;
 }
 
 .banner-style-4:after {
@@ -1645,6 +1640,19 @@ Banner-3
   color: #fff;
   opacity: .7;
 }
+
+.banner-style-4 .carousel .carousel-inner .carousel-item .carousel-caption {
+  bottom: 300px;
+}
+
+.banner-style-4 .carousel .carousel-control-prev{
+  display:none;
+}
+
+.banner-style-4 .carousel .carousel-control-next{
+  display:none;
+}
+
 
 /*--------------------------
 Counter
@@ -2315,7 +2323,7 @@ Counter 4
 }
 
 .testimonial-4 {
-  padding-top: 190px;
+  padding-top: 120px;  
 }
 
 .cta-inner4 {

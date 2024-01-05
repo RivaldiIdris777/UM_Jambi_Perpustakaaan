@@ -88,12 +88,12 @@
                         </a>
                     </div>
                     <div class="card col-md-3 m-2 rounded bg-danger" style="padding-top: 33px;">
-                        <a href="https://pustaka.umjambi.ac.id/">
+                        <a href="https://opac.umjambi.ac.id/">
                             <img class="mx-auto d-block"
                                 src="<?php echo base_url()?>asset/frontends/images/online-katalog.png" alt=""
                                 style="width: 40%;">
                             <div class="card-body text-center">
-                                <h5 class="text-light">Online Katalog</h5>
+                                <h5 class="text-light">OPAC</h5>
                             </div>
                         </a>
                     </div>

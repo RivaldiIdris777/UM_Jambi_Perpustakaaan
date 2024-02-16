@@ -98,7 +98,7 @@
                         </a>
                     </div>
                     <div class="card col-md-3 m-2 rounded bg-primary pt-4">
-                        <a href="https://umjambi.perpustakaan.co.id/admin.ks">
+                        <a href="https://repo.umjambi.ac.id/">
                             <img class="mx-auto d-block"
                                 src="<?php echo base_url()?>asset/frontends/images/repository.png" alt=""
                                 style="width: 35%;">

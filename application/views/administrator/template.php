@@ -123,7 +123,7 @@
     </script>
     <script>
     CKEDITOR.replace('editor1' ,{
-      filebrowserImageBrowseUrl : '<?php echo base_url('asset/kcfinder'); ?>'
+      filebrowserImageBrowseUrl : '<?php echo base_url('asset/kcfinder'); ?>', 
     });
   </script>
   <script type="text/javascript">
